@@ -13,10 +13,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig  {
 
+
 //    http 요청에 대한 보안을 설정.
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return null;
+        return http.build();
     }
 
 //    BCryptPasswordEncoder의 해시 함수를 이용하여 비밀번호 암호화하여 저장.
