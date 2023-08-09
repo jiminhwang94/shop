@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Table(name="member")
 @Getter @Setter
 @ToString
+//회원정보를 저장하는 Member Entity
 public class Member {
 
     @Id
@@ -22,6 +23,7 @@ public class Member {
 
     private String name;
 
+//    동일한 값이 들어오지 못하게 @Column(unique = true)지정.왜? 이메일은 유일하게 구분해서.
     @Column(unique = true)
     private String email;
 

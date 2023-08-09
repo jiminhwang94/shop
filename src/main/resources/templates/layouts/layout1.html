@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultrap.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <!--layout기능을 사용하기 위해 html태그에 layout네임스페이스를 추가-->
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -16,17 +18,25 @@
 
     <th:block layout:fragment="script"></th:block>
     <th:block layout:fragment="css"></th:block>
-
 </head>
 <body>
-
+<!--th:replace속성은 해당 속성이 선언된 html 태그를 다른 html 파일로 치환하는것으로 이해하면 됩니다-->
 <div th:replace="~{fragments/header::header}"></div>
 
+<!--layout에서 변경되는 영역을 fragment로 설정쇼핑몰을 만들면서 만들 페이지는 이영역에 들어갈 것임-->
 <div layout:fragment="content" class="content">
 
 </div>
+<!--header영여과 마찬가지로, fragments폴더 아래의 footer.html파일의 th:fragment=footer 영역을 가지고 옴-->
 
+<!--    <div th:replace="fragments/footer::footer"></div>-->
 <div th:replace="~{fragments/footer::footer}"></div>
+<!--두개의 차이점-->
+<!--위의 경우,
+첫 번째 코드인 <div th:replace="fragments/footer::footer"></div>는
+"mytemplate.html"과 "footer.html"이 같은 경로인 templates 폴더 내에 위치해야 정상적으로 작동합니다.
+반면 두 번째 코드인 <div th:replace="~{fragments/footer::footer}"></div>는
+"footer.html"이 "fragments" 폴더 내에 있기만 하면 됩니다.-->
 
 </body>
 </html>
