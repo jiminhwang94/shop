@@ -16,7 +16,7 @@
 <th:block layout:fragment="script">
     <script th:inline="javascript">
         $(document).ready(function(){
-            var errorMessage = /*[[${errorMessage}]]*/ null;
+            var errorMessage = [[${errorMessage}]];
             if (errorMessage != null) {
                 alert(errorMessage);
             }
