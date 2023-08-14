@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,7 +49,25 @@ public class SecurityConfig {
                 .logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
                 .logoutSuccessUrl("/");
+
+        http.authorizeRequests()
+                .mvcMatchers("/","/members/**",
+                        "/item/**","/images/**").permitAll()        //permitAll()을 통해 모든 사용자가 인증없이 해당 경로에 접근할 수 있도록 설정한다. 많은 경로가 이에 해당.
+                .mvcMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated();  //mvcMatchers에 설정한 경로를 제외한 나머지 경로들은 모두 인증을 요구하도록 설정.
+
+        http.exceptionHandling()
+                .authenticationEntryPoint(
+                        new CustomAuthenticationEntryPoint());      //인증되지 않은 사용자가 리소스에 접근할때 수행되는 핸들러
+
         return http.build();
+    }
+
+    //WebSecurity를 커스텀 설정하기 위해서 WebSecurityCustomizer라는 콜백 인터페이스를 사용합니다.
+    // 디렉터리의 하위 파일은 인증을 무시하도록 설정.
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers("/css/**", "/js/**", "/img/**");
     }
 
 //    AuthenticationManagerBuilder가 AuthenticationManager를 생성한다.
