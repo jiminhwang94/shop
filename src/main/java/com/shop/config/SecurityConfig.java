@@ -1,14 +1,14 @@
 package com.shop.config;
 
-import com.shop.entity.Member;
 import com.shop.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -16,30 +16,51 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter{
+// extends WebSecurityConfigurerAdapter이 2.7부터 이 상속은 사용을 안한다. 그래서 시큐리티 부분을 수정했다.
+//로그인 성공 테스트 오류가 시큐리티 부분의 문제였다. 왜? 위의 상속이 이제 적용이 안되서 @Bean 객체를 만들어야했다.
+public class SecurityConfig {
 
     @Autowired
     MemberService memberService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    //WebSecurityConfigurationAdapter는 이제 사장되어서 override하여 SecurityFilterChain을 사용할 수 없다
+    //따라서 직접 SecurityFilterChain을 Bean으로 설정하여 밑에 필요한 부분을 커스터마이징 하면 된다.
+    ///
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        /*http
+                // "/thymeleaf/**"로 시작하는 모든 경로에 대해 인증 없이 접근을 허용합니다.
+                .authorizeHttpRequests(auth -> auth
+                        .antMatchers("/thymeleaf/**").permitAll()
+                        // 그 외의 모든 요청에 대해 인증이 필요합니다.
+                        .anyRequest().authenticated()
+                );*/
+        /*http
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().permitAll());*/
+
         http.formLogin()
-                .loginPage("/member/login")
-                .defaultSuccessUrl("/")             //로그인 성공시 이동할 URL
+                .loginPage("/members/login")
+                .defaultSuccessUrl("/")
                 .usernameParameter("email")
-                .failureUrl("/members/login/error")     //로그인 실패시 이동할 URL
+                .failureUrl("/members/login/error")
                 .and()
                 .logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))     //로그아웃 URL
-                .logoutSuccessUrl("/");         //로그아웃 성공시 이동할 URL
+                .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
+                .logoutSuccessUrl("/");
+        return http.build();
     }
 
 //    AuthenticationManagerBuilder가 AuthenticationManager를 생성한다.
 //    AuthenticationManager에서 인증이 이루어진다.
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(memberService)
-                .passwordEncoder(passwordEncoder());
+/*스프링 시큐리티의 인증을 담당하는 AuthenticationManager는 이전 설정 방법으로
+authenticationManagerBuilder를 이용해서 userDetailsService와 passwordEncoder를 설정해주어야 했습니다.
+그러나 변경된 설정에서는 AuthenticationManager 빈 생성 시 스프링의 내부 동작으로 인해
+위에서 작성한 UserSecurityService와 PasswordEncoder가 자동으로 설정됩니다.*/
+    @Bean
+    AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
 

@@ -45,6 +45,7 @@ class MemberControllerTest {
 
     @Test
     @DisplayName("로그인 성공 테스트")
+    // post, get 방식의 문제로 알았지만. 시큐리티 버전 이후의 코드가 적용이 안되므로 변경 후 성공.
     public void loginSuccessTest() throws Exception{
         String email = "test@email.com";
         String password = "1234";
