@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Setter @Getter
-public class OrderItem {
+public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue
@@ -27,8 +27,8 @@ public class OrderItem {
     
     private int count;  //수량
 
-    private LocalDateTime regTime;
-
-    private LocalDateTime updateTime;
+//    BaseEntity를 상속 받기에 등록시간과 업데이트시간 삭제.왜? BaseEntity에 다 담겨져있다.
+//    private LocalDateTime regTime;
+//    private LocalDateTime updateTime;
 
 }

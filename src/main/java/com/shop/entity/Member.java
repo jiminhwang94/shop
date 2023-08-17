@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Getter @Setter
 @ToString
 //회원정보를 저장하는 Member Entity
-public class Member {
+public class Member extends BaseEntity{
 
     @Id
     @Column(name = "member_id")

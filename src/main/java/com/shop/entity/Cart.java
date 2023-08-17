@@ -18,7 +18,7 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne           //1:1 매핑
+    @OneToOne(fetch = FetchType.LAZY)           //1:1 매핑 / 지연 로딩
     @JoinColumn(name = "member_id") //member_id라는 외래키 지정. 왜? 매핑을 해야해서.
     private Member member;
 }
