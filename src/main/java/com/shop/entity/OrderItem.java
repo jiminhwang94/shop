@@ -10,15 +10,16 @@ import java.time.LocalDateTime;
 @Setter @Getter
 public class OrderItem {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "order_item_id")
     private Long id;
 
-    @ManyToOne      //하나의 상품은 여러 주문 상픔 가능 다대일 단반향 매핑
+    @ManyToOne(fetch = FetchType.LAZY)      //하나의 상품은 여러 주문 상픔 가능 다대일 단반향 매핑
     @JoinColumn(name = "item_id")
     private  Item item;
 
-    @ManyToOne  // 한번의 주문에 여러 개의 상품 주문 가능 다대일 단반향 매핑
+    @ManyToOne(fetch = FetchType.LAZY)  // 한번의 주문에 여러 개의 상품 주문 가능 다대일 단반향 매핑
     @JoinColumn(name = "order_id")
     private Order order;
 
