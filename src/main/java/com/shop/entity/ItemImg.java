@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "item_img")
 @Data
-public class ItemImg {
+public class ItemImg extends BaseEntity{
 
     @Id
     @Column(name = "item_img_id")
@@ -20,6 +20,8 @@ public class ItemImg {
 
     private String imgUrl;
 
+    private String repimgYn;
+
     @ManyToOne(fetch = FetchType.LAZY)      //상품 엔티티와 다대일 매핑.지연 로딩 설정하여 상품 엔티티가 필요한 경우만 데이터 조회.
     @JoinColumn(name = "item_id")
     private Item item;
@@ -29,4 +31,5 @@ public class ItemImg {
         this.imgName = imgName;
         this.imgUrl = imgUrl;
     }
+
 }

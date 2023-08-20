@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+//업로드한 파일을 읽어올 경로
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${uploadPath}")
