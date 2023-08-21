@@ -60,6 +60,7 @@ class ItemServiceTest {
         itemFormDto.setPrice(1000);
         itemFormDto.setStockNumber(100);
 
+        //saveItem저장 경로가 없다는 에러 발생. 그래서 저 루트로 폴더 생성 후 테스트 진행. 오류 해결
         List<MultipartFile> multipartFileList = createMultipartFiles();
         Long itemId = itemService.saveItem(itemFormDto, multipartFileList);     //상품 데이터와 이미지 정보를 파라미터로 넘겨서 저장 후 저장된 상품의 아이디 값을 반환 값으로 리턴
 
