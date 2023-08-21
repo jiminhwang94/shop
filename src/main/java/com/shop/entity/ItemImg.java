@@ -1,12 +1,13 @@
 package com.shop.entity;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "item_img")
-@Data
+@Setter @Getter
 public class ItemImg extends BaseEntity{
 
     @Id
