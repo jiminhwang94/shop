@@ -13,4 +13,6 @@ public interface ItemRepositoryCustom {
     //Pageable = 페이징 정보를 담고있다.
     // 이 두 객체를 파라미터로 받는 getAdminItemPage 메소드로 정의.
     Page<Item> getAdminItemPage(ItemSearchDto itemSearchDto, Pageable pageable);
+
+//    Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable);
 }
