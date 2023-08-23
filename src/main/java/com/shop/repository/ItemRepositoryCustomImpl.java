@@ -5,6 +5,8 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.constant.ItemSellStatus;
 import com.shop.dto.ItemSearchDto;
+import com.shop.dto.MainItemDto;
+import com.shop.dto.QMainItemDto;
 import com.shop.entity.Item;
 import com.shop.entity.QItem;
 import com.shop.entity.QItemImg;
@@ -88,43 +90,44 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         return new PageImpl<>(content, pageable, total); //조회한 데이터를 page 클래스의 구현체인 PageImpl객체로 반환한다.
     }
 
-//    private BooleanExpression itemNmLike(String searchQuery){
-//        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
-//    }
-//
-//    @Override
-//    public Page<MAinItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
-//        QItem item = QItem.item;
-//        QItemImg itemImg = QItemImg.itemImg;
-//
-//        List<MainItemDto> content = queryFactory
-//                .select(
-//                        new QMainItemDto(
-//                                item.id,
-//                                item.itemNm,
-//                                item.itemDetail,
-//                                itemImg.imgUrl,
-//                                item.price)
-//                )
-//                .from(itemImg)
-//                .join(itemImg.item, item)
-//                .where(itemImg.repimgYn.eq("Y"))
-//                .where(itemNmLike(itemSearchDto.getSearchQuery()))
-//                .orderBy(item.id.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//
-//        long total = queryFactory
-//                .select(Wildcard.count)
-//                .from(itemImg)
-//                .join(itemImg.item, item)
-//                .where(itemImg.repimgYn.eq("Y"))
-//                .where(itemNmLike(itemSearchDto.getSearchQuery()))
-//                .fetchOne()
-//                ;
-//
-//        return new PageImpl<>(content, pageable, total);
-//    }
+    //검색어가 null이 아니면 상품명에 해당 검색어가 포함되는 상품을 조회하는 조건을 반환한다.
+    private BooleanExpression itemNmLike(String searchQuery){
+        return StringUtils.isEmpty(searchQuery) ? null : QItem.item.itemNm.like("%" + searchQuery + "%");
+    }
+
+    @Override           //getMainItemPage() 메소드를 구현한다.
+    public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+        QItem item = QItem.item;
+        QItemImg itemImg = QItemImg.itemImg;
+
+        List<MainItemDto> content = queryFactory
+                .select(
+                        new QMainItemDto(   //QMainItemDto에 반환할 값들을 넣어준다. @QueryProjection을 사용하면 DTO로 바로 조회 가능. 엔티티 조회 후 DTO로 변환하는 과정 줄인다.
+                                item.id,
+                                item.itemNm,
+                                item.itemDetail,
+                                itemImg.imgUrl,
+                                item.price)
+                )
+                .from(itemImg)
+                .join(itemImg.item, item)   //itemImg와 item을 내부 조인한다.
+                .where(itemImg.repimgYn.eq("Y"))    //상품 이미지의 경우 대표 상품 이미지만 불러온다.
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .orderBy(item.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        long total = queryFactory
+                .select(Wildcard.count)
+                .from(itemImg)
+                .join(itemImg.item, item)
+                .where(itemImg.repimgYn.eq("Y"))
+                .where(itemNmLike(itemSearchDto.getSearchQuery()))
+                .fetchOne()
+                ;
+
+        return new PageImpl<>(content, pageable, total);
+    }
 
 }
