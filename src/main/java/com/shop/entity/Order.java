@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Setter @Getter
 @Table(name = "orders")
-public class Order {
+public class Order extends BaseEntity{
 
     @Id
     @GeneratedValue
@@ -65,6 +65,15 @@ public class Order {
             totalPrice += orderItem.getTotalPrice();
         }
         return totalPrice;
+    }
+
+    //주문 상태를 취소 상태로 바꿔주는 메소드
+    public void cancelOrder(){
+        this.orderStatus = OrderStatus.CANCEL;
+
+        for (OrderItem orderItem : orderItems){
+            orderItem.cancel();
+        }
     }
 
 }

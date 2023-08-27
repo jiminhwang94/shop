@@ -25,4 +25,18 @@ public class CartItem {
     private Item item;
 
     private int count;      //장바구니에 몇개 담을지 저장
+
+    //장바구니에 담을 상품 엔티티 생성
+    public static CartItem createCartItem(Cart cart,Item item,int count){
+        CartItem cartItem = new CartItem();
+        cartItem.setCart(cart);
+        cartItem.setItem(item);
+        cartItem.setCount(count);
+        return  cartItem;
+    }
+
+    //장바구니에 기존에 담겨있을 때 기존 수량에 현재 담을 수량을 더해줄 때 사용
+    public void addCount(int count){
+        this.count += count;
+    }
 }
