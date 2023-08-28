@@ -2,6 +2,7 @@ package com.shop.entitiy;
 
 import com.shop.entity.Member;
 import com.shop.repository.MemberRepository;
+import com.shop.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,9 +43,8 @@ public class MemberTest {
 
         System.out.println("register time : " + member.getRegTime());
         System.out.println("update time : " + member.getUpdateTime());
-        System.out.println("create time : " + member.getCreateBy());
+        System.out.println("create time : " + member.getCreatedBy());
         System.out.println("modify time : " + member.getModifiedBy());
     }
-
 
 }

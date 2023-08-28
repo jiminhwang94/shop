@@ -2,6 +2,7 @@ package com.shop.dto;
 
 import com.shop.constant.OrderStatus;
 import com.shop.entity.Order;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter @Setter
+@Data
 public class OrderHistDto {
     //주문 정보를 담을 클래스
 

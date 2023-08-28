@@ -53,13 +53,13 @@ public class OrderService {
 
         return order.getId();
     }
-
     @Transactional(readOnly = true)
     public Page<OrderHistDto> getOrderList(String email, Pageable pageable) {
 
         List<Order> orders = orderRepository.findOrders(email, pageable);
         Long totalCount = orderRepository.countOrder(email);
-
+        System.out.println("이메일: "+ email);
+        System.out.println("값가져오기: "+orderRepository.findOrders(email, pageable));
         List<OrderHistDto> orderHistDtos = new ArrayList<>();
 
         for (Order order : orders) {
@@ -76,6 +76,9 @@ public class OrderService {
             orderHistDtos.add(orderHistDto);
         }
 
+        System.out.println(orderHistDtos);
+        System.out.println(pageable);
+        System.out.println(totalCount);
         return new PageImpl<OrderHistDto>(orderHistDtos, pageable, totalCount);
     }
 

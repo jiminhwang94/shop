@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -34,7 +33,7 @@ public class OrderController {
     //Principal = 현재 로그인한 사용자 정보를 나타내는 객체
     @PostMapping(value = "/order")
     public @ResponseBody ResponseEntity order (@RequestBody @Valid OrderDto orderDto, BindingResult bindingResult, Principal principal){
-
+        System.out.println("여기도 :" + principal.getName());
         if (bindingResult.hasErrors()){     //주문 정보를 받는 orderDto 객체에 데이터 바인딩 시 에러가 있는지 검사한다.
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
@@ -47,6 +46,7 @@ public class OrderController {
         //현재 로그인 유저의 정보를 얻기 위해서 @Controller 어노테이션이 선언된 클래스에서 메소드 인자로 principal객체를 넘겨 줄 경우 해당 객체에 직접 접근할 수 있다.
         //principal  객체에서 현재 로그인한 회원의 이메일 정보를 조회 한다.
         String email = principal.getName();
+        System.out.println("여기 찍음 :" + principal.getName());
         Long orderId;
 
         try {
@@ -61,21 +61,18 @@ public class OrderController {
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderHist(@PathVariable("page") Optional<Integer> page, Principal principal, Model model){
 
-
-
-        //한번에 가지고 올 주문의 갯수는 4개
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0,4);
-
-        //현재 로그인한 회원은 이메일과 페이징 객체를 파라미터로 전달하여
-        //화면에 전달한 주문 목록 데이터를 리턴값으로 받음
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
         Page<OrderHistDto> ordersHistDtoList = orderService.getOrderList(principal.getName(), pageable);
 
         model.addAttribute("orders", ordersHistDtoList);
         model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
+        System.out.print("abc  "+model);
+
         return "order/orderHist";
     }
+
 
     //자바스크립트에서 취소할 주문 번호는 조작이 가능하므로 다른 사람의 주문을 취소하지 못하도록 주문 취소 권한을 검사한다.
     @PostMapping("/order/{orderId}/cancel")

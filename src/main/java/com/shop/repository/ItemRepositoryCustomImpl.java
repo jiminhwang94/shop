@@ -1,5 +1,6 @@
 package com.shop.repository;
 
+import com.querydsl.core.QueryResults;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -59,7 +60,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
         if(StringUtils.equals("itemNm", searchBy)){
             return QItem.item.itemNm.like("%" + searchQuery + "%");
         } else if(StringUtils.equals("createdBy", searchBy)){
-            return QItem.item.createBy.like("%" + searchQuery + "%");
+            return QItem.item.createdBy.like("%" + searchQuery + "%");
         }
 
         return null;
@@ -78,6 +79,7 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
                 .offset(pageable.getOffset())   //데이터를 가지고 올 시작 인덱스 지정
                 .limit(pageable.getPageSize())  //한번에 가지고 올 최대 개수 지정
                 .fetch();                       //조회한 리스트 및 전체 개수를 포함하는 QueryResults를 반환.2번의 쿼리문 실행
+
 
         long total = queryFactory.select(Wildcard.count).from(QItem.item)
                 .where(regDtsAfter(itemSearchDto.getSearchDateType()),
