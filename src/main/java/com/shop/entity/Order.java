@@ -36,9 +36,10 @@ public class Order extends BaseEntity{
     // 하나의 주문이 여러 개의 주문 상품을 갖으므로 List 자료형을 사용해서 매핑
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    private LocalDateTime regTime;
-
-    private LocalDateTime updateTime;
+    //BaseEntity 를 상속받기에 필요없다.
+//    private LocalDateTime regTime;
+//
+//    private LocalDateTime updateTime;
 
     public void addOrderItem(OrderItem orderItem){  //orderItems에는 주문 상품 정보들을 담아준다. orderItem 객체를 order 객체의 orderItems에 추가한다.
         orderItems.add(orderItem);
